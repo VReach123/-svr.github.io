@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scentopia - Perfumes</title>
+    <style>
+        /* --- 1. Global (Overall Page) Styles --- */
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            background-color: #f8f8f8;
+            color: #000;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* --- 2. Header (Top Bar) Styles --- */
+        header {
+            background-color: #fff;
+            padding: 15px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #e91e63;
+            text-decoration: none;
+        }
+
+        nav a {
+            color: #000;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+        }
+
+        .cart-info {
+            font-weight: bold;
+            color: #000;
+            display: flex;
+            align-items: center;
+        }
+
+        .cart-count {
+            background-color: #e91e63;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 7px;
+            font-size: 14px;
+            margin-left: 5px;
+        }
+
+        /* --- 3. Hero Section (Big Welcome Area) Styles --- */
+        .hero {
+            background: linear-gradient(to right, #a855f7, #ec4899);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 36px;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        .hero-button {
+            display: inline-block;
+            background-color: #fff;
+            color: #e91e63;
+            padding: 10px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .hero-button:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* --- 4. Products Section Styles --- */
+        .products {
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .products h2 {
+            font-size: 30px;
+            margin-bottom: 30px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 35px;
+            text-align: left;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .product-card h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #e91e63;
+        }
+
+        .product-card p {
+            font-size: 16px;
+            color: #000;
+            margin-bottom: 20px;
+        }
+
+        .product-card .price {
+            font-size: 28px;
+            font-weight: bold;
+            color: #000;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        /* --- 5. Add to Cart Button Logic (Visual Effect Only - No JavaScript) --- */
+        .add-to-cart-wrapper {
+            position: relative;
+            display: block;
+            width: 100%;
+        }
+
+        .add-to-cart-checkbox {
+            display: none;
+        }
+
+        .add-button {
+            background-color: #e91e63;
+            color: white;
+            padding: 6px 15px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            display: block;
+            transition: background-color 0.3s ease, transform 0.3s ease, color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-size: 15px;
+        }
+        .add-button:hover {
+            background-color: #d81b60;
+        }
+
+        .add-button::after {
+            content: "Added! \2713";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #4CAF50;
+            color: white;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .add-to-cart-checkbox:checked + .add-button {
+            background-color: #4CAF50;
+            color: transparent;
+            transform: scale(0.98);
+        }
+        .add-to-cart-checkbox:checked + .add-button::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* --- 6. Footer (Bottom Bar) Styles --- */
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        /* --- 7. Mobile Adjustments (Responsive Design) --- */
+        @media (max-width: 600px) {
+            .hero h1 {
+                font-size: 28px;
+            }
+            .products h2 {
+                font-size: 24px;
+            }
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+            header {
+                flex-direction: column;
+                align-items: center;
+            }
+            nav, .cart-info {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <a href="#" class="logo">Scentopia</a>
+            <nav>
+                <a href="#products">Perfumes</a>
+                <a href="#hero">Home</a>
+            </nav>
+            <div class="cart-info">
+                Cart: <span class="cart-count">0</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero">
+        <div class="container">
+            <h1>Find Your Perfect Scent</h1>
+            <p>Discover our beautiful collection of fragrances.</p>
+            <a href="#products" class="hero-button">Shop Now</a>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="products">
+        <div class="container">
+            <h2>Our Top Picks</h2>
+            <div class="product-grid">
+                <!-- Product 1 -->
+                <div class="product-card">
+                    <img src="D.png" alt="Dior Sauvage">
+                    <h3>Chanel No. 5</h3>
+                    <p>Classic floral elegance.</p>
+                    <span class="price">$135.00</span>
+                    <label class="add-to-cart-wrapper">
+                        <input type="checkbox" class="add-to-cart-checkbox">
+                        <span class="add-button">Add to Cart</span>
+                    </label>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="product-card">
+                    <img src="N.avif" alt="Chanel No. 5">
+                    <h3>Dior Sauvage</h3>
+                    <p>Fresh and wild for him.</p>
+                    <span class="price">$110.00</span>
+                    <label class="add-to-cart-wrapper">
+                        <input type="checkbox" class="add-to-cart-checkbox">
+                        <span class="add-button">Add to Cart</span>
+                    </label>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="product-card">
+                    <img src="BB.webp" alt="Gucci Bloom">
+                    <h3>Gucci Bloom</h3>
+                    <p>Rich, authentic floral.</p>
+                    <span class="price">$98.50</span>
+                    <label class="add-to-cart-wrapper">
+                        <input type="checkbox" class="add-to-cart-checkbox">
+                        <span class="add-button">Add to Cart</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Scentopia. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
